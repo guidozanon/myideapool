@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/MyIdeasPool.Core/bin/Debug/netcoreapp2.1
+/MyIdeasPool.Core/obj
+/MyIdeasPool.Tests/obj
+/MyIdeasPool.Tests/bin/Debug/netcoreapp2.1
+/MyIdeasPool.WebApi/bin/Debug/netcoreapp2.1
+/MyIdeasPool.WebApi/obj
+*.user
+/.vs/MyIdeasPool
