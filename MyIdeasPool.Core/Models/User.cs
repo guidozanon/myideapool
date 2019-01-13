@@ -4,8 +4,10 @@ using System.Text;
 
 namespace MyIdeasPool.Core.Models
 {
-	class User
+	public class User
 	{
-		public int Id { get; internal set; }
+		public string Id { get; internal set; }
+		public string Name { get; set; }
+		public string Email { get; set; }
 	}
 }

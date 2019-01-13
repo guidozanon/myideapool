@@ -38,5 +38,26 @@ namespace MyIdeasPool.WebApi.Controllers
 
 			return Ok(ideas);
 		}
+
+		[HttpPost]
+		public async Task<ActionResult> Create(IdeaModel idea)
+		{
+			//TODO complete
+			return Ok();
+		}
+
+		[HttpPut]
+		public async Task<ActionResult> Update(IdeaModel idea)
+		{
+			//TODO complete
+			return Ok();
+		}
+
+		[HttpDelete]
+		public async Task<ActionResult> Delete(int id)
+		{
+			//TODO complete
+			return Ok();
+		}
 	}
 }

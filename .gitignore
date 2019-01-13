@@ -10,3 +10,6 @@
 /MyIdeasPool.WebApi/obj
 *.user
 /.vs/MyIdeasPool
+/MyIdeasPool.Tests/bin/Debug/netcoreapp2.2
+/MyIdeasPool.Core/bin/Debug/netcoreapp2.2
+/MyIdeasPool.WebApi/bin/Debug/netcoreapp2.2

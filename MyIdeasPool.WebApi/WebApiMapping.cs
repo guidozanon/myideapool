@@ -14,6 +14,8 @@ namespace MyIdeasPool.WebApi
 		{
 			CreateMap<Idea, IdeaModel>();
 			CreateMap<IdeaModel, Idea>();
+
+			CreateMap<User, UserModel>();
 		}
 	}
 }

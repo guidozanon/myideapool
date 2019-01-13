@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace MyIdeasPool.Core.Domain
 {
-	class UserEntity
+	class UserEntity  : IdentityUser
 	{
-		public int Id { get; set; }
+		public string AvatarUrl { get; set; }
 	}
 }
