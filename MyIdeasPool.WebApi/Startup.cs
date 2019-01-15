@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MyIdeasPool.Core;
+using MyIdeasPool.WebApi.Helpers;
 using MyIdeasPool.WebApi.Security;
 
 namespace MyIdeasPool.WebApi
@@ -25,13 +26,51 @@ namespace MyIdeasPool.WebApi
 		{
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-				 //.AddJsonOptions(options => {
-					// options.SerializerSettings.date
-				 //}); ;
 
 			services.AddCoreRegistry(Configuration.GetConnectionString("IdeasDatabase"));
 			services.AddWebApiRegistry(Configuration);
-			
+
+			ConfigureIdentity(services);
+
+			services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
+
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer();
+		}
+
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
+			else
+			{
+				app.UseHsts();
+			}
+
+			RunInstallers(app);
+
+			app.UseHttpsRedirection();
+			app.UseCustomHeaderMiddleware();
+			app.UseAuthentication();
+			app.UseCustomAuthMiddleware();
+			app.UseMvc();
+			app.UseCors();
+
+		}
+
+		private static void RunInstallers(IApplicationBuilder app)
+		{
+			using (var scope = app.ApplicationServices.CreateScope())
+			{
+				var installerEngine = scope.ServiceProvider.GetService<IInstallerEngine>();
+				installerEngine.Install().Wait();
+			}
+		}
+
+		private static void ConfigureIdentity(IServiceCollection services)
+		{
 			services.Configure<IdentityOptions>(options =>
 			{
 				// Password settings.
@@ -52,33 +91,6 @@ namespace MyIdeasPool.WebApi
 				"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 				options.User.RequireUniqueEmail = true;
 			});
-
-			services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
-
-			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-				.AddJwtBearer();
-		}
-
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-		{
-			if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-			}
-			else
-			{
-				app.UseHsts();
-			}
-
-			//app.UseHttpsRedirection();
-
-			app.UseCustomHeaderMiddleware();
-			app.UseAuthentication();
-			app.UseCustomAuthMiddleware();
-			app.UseMvc();
-				
-			app.UseCors();
-			
 		}
 	}
 }

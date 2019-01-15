@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyIdeasPool.Core;
 using MyIdeasPool.WebApi.Configuration;
+using MyIdeasPool.WebApi.Helpers;
 using MyIdeasPool.WebApi.Security;
 
 namespace MyIdeasPool.WebApi
@@ -16,7 +17,7 @@ namespace MyIdeasPool.WebApi
 			services.Configure<JwtAuthentication>(configuration.GetSection(JwtAuthenticationKey));
 			services.Configure<GlobalConfiguration>(configuration.GetSection(GlobalConfigurationKey));
 
-			services.AddTransient<IMapper>(provider =>
+			services.AddTransient(provider =>
 				new MapperConfiguration(m =>
 					{
 						m.AddProfile<WebApiMappingProfile>();
@@ -26,6 +27,14 @@ namespace MyIdeasPool.WebApi
 			);
 
 			services.AddSingleton<JwtTokenGenerator>();
+			services.AddTransient<IInstallerEngine, InstallerEngine>();
+
+			services.Scan(scan => scan
+				.FromAssemblyOf<Startup>()
+				.AddClasses(classes => classes.AssignableTo<IInstaller>())
+				.AsImplementedInterfaces()
+				.WithTransientLifetime()
+				);
 		}
 	}
 }

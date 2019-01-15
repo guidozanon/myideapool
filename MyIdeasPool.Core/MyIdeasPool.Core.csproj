@@ -8,6 +8,7 @@
     <PackageReference Include="automapper" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
+    <PackageReference Include="Scrutor" Version="3.0.2" />
     <PackageReference Include="System.Interactive.Async" Version="3.2.0" />
   </ItemGroup>
 

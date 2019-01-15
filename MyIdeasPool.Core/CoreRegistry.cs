@@ -20,6 +20,13 @@ namespace MyIdeasPool.Core
 
 			services.AddDefaultIdentity<UserEntity>()
 				.AddEntityFrameworkStores<IdeasContext>();
+
+			services.Scan(scan => scan
+				.FromAssemblyOf<IdeasContext>()
+				.AddClasses(classes => classes.AssignableTo<IInstaller>())
+				.AsImplementedInterfaces()
+				.WithTransientLifetime()
+				);
 		}
 	}
 }
