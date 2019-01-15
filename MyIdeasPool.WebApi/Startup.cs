@@ -70,7 +70,7 @@ namespace MyIdeasPool.WebApi
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 
 			app.UseCustomHeaderMiddleware();
 			app.UseAuthentication();

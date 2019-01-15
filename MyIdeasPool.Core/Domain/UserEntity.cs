@@ -6,5 +6,6 @@ namespace MyIdeasPool.Core.Domain
 	{
 		public string AvatarUrl { get; set; }
 		public string Name { get; set; }
+
 	}
 }

@@ -5,6 +5,7 @@ using MyIdeasPool.WebApi.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace MyIdeasPool.WebApi.Security
 {
@@ -33,8 +34,19 @@ namespace MyIdeasPool.WebApi.Security
 
 			return new TokenModel
 			{
-				Jwt = new JwtSecurityTokenHandler().WriteToken(token)
+				Jwt = new JwtSecurityTokenHandler().WriteToken(token),
+				RefreshToken = GenerateToken()
 			};
+		}
+
+		public string GenerateToken(int size = 32)
+		{
+			var randomNumber = new byte[size];
+			using (var rng = RandomNumberGenerator.Create())
+			{
+				rng.GetBytes(randomNumber);
+				return Convert.ToBase64String(randomNumber);
+			}
 		}
 	}
 }

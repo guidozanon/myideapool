@@ -19,11 +19,17 @@ namespace MyIdeasPool.WebApi.Security
 
 		public async Task Invoke(HttpContext context, IUserService userService)
 		{
-			IHeaderDictionary headers = context.Request.Headers;
+			var token = context.Request.Headers[DefaultHeader];
 
 			if (context.Request.HttpContext.User.Identity.IsAuthenticated)
 			{
 				userService.SetCurrentUser(context.Request.HttpContext.User.Identity.Name);
+
+				if (!await userService.IsValidToken(token, Core.Domain.TokenType.Token))
+				{
+					context.Response.StatusCode = 401;
+					return;
+				}
 			}
 
 			await _next(context);

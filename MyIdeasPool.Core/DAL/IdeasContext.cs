@@ -14,5 +14,7 @@ namespace MyIdeasPool.Core.DAL
 
 		public virtual DbSet<IdeaEntity> Ideas { get; set; }
 
+		public virtual DbSet<UserTokenEntity> UserJwtTokens { get; set; }
+
 	}
 }

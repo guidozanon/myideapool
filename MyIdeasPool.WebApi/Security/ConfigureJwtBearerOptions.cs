@@ -23,7 +23,7 @@ namespace MyIdeasPool.WebApi.Security
 			options.ClaimsIssuer = jwtAuthentication.ValidIssuer;
 			options.IncludeErrorDetails = true;
 			options.RequireHttpsMetadata = true;
-			
+
 			options.TokenValidationParameters = new TokenValidationParameters
 			{
 				ValidateActor = true,

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace MyIdeasPool.WebApi.Controllers
 {
 	[Route("[controller]")]
 	[ApiController]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class UsersController : ControllerBase
 	{
 		private readonly IUserService _userService;
@@ -47,7 +49,12 @@ namespace MyIdeasPool.WebApi.Controllers
 				var result = await _userManager.CreateAsync(newUser, signup.Password);
 				if (result.Succeeded)
 				{
-					TokenModel token = _jwtTokenGenerator.Generate(_mapper.Map<User>(newUser));
+					var token = _jwtTokenGenerator.Generate(_mapper.Map<User>(newUser));
+
+					_userService.SetCurrentUser(newUser.UserName);
+
+					await _userService.AddToken(token.Jwt, TokenType.Token);
+					await _userService.AddToken(token.RefreshToken, TokenType.RefreshToken);
 
 					return Ok(token);
 				}
@@ -55,20 +62,11 @@ namespace MyIdeasPool.WebApi.Controllers
 				{
 					return StatusCode(400, result.ToString());
 				}
-
 			}
 
-			return base.StatusCode(400, "error");
+			return base.StatusCode(400, ModelState);
 		}
 
-		//[HttpPost]
-		//[ValidateAntiForgeryToken]
-		//public async Task<IActionResult> Logout()
-		//{
-		//	await _signInManager.SignOutAsync();
-		//	//_logger.LogInformation("User logged out.");
-		//	return Ok();
-		//	//return RedirectToAction(nameof(HomeController.Index), "Home");
-		//}
+		
 	}
 }
