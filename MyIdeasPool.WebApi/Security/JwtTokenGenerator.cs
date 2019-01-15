@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 
 namespace MyIdeasPool.WebApi.Security
 {
-	public class JwtTokenGenerator
+	public class JwtTokenGenerator : ITokenGenerator
 	{
 		private readonly IOptions<JwtAuthentication> _jwtAuthentication;
 
@@ -39,7 +39,7 @@ namespace MyIdeasPool.WebApi.Security
 			};
 		}
 
-		public string GenerateToken(int size = 32)
+		private string GenerateToken(int size = 32)
 		{
 			var randomNumber = new byte[size];
 			using (var rng = RandomNumberGenerator.Create())

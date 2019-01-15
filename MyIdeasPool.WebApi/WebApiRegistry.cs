@@ -26,7 +26,7 @@ namespace MyIdeasPool.WebApi
 				).CreateMapper()
 			);
 
-			services.AddSingleton<JwtTokenGenerator>();
+			services.AddSingleton<ITokenGenerator, JwtTokenGenerator>();
 			services.AddTransient<IInstallerEngine, InstallerEngine>();
 
 			services.Scan(scan => scan

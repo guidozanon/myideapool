@@ -24,10 +24,10 @@ namespace MyIdeasPool.WebApi.Controllers
 		private readonly IOptions<GlobalConfiguration> _config;
 		private readonly IMapper _mapper;
 		private readonly UserManager<UserEntity> _userManager;
-		private readonly JwtTokenGenerator _jwtTokenGenerator;
+		private readonly ITokenGenerator _jwtTokenGenerator;
 
 		public UsersController(IUserService userService, IOptions<GlobalConfiguration> config, IMapper mapper
-			, UserManager<UserEntity> userManager, JwtTokenGenerator jwtTokenGenerator)
+			, UserManager<UserEntity> userManager, ITokenGenerator jwtTokenGenerator)
 		{
 			_config = config;
 			_mapper = mapper;
@@ -38,7 +38,7 @@ namespace MyIdeasPool.WebApi.Controllers
 
 		[HttpPost]
 		[AllowAnonymous]
-		public async Task<ActionResult<TokenModel>> Signup(SignupModel signup)
+		public async Task<IActionResult> Signup(SignupModel signup)
 		{
 			if (ModelState.IsValid)
 			{

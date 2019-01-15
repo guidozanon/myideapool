@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MyIdeasPool.Core\MyIdeasPool.Core.csproj" />
     <ProjectReference Include="..\MyIdeasPool.WebApi\MyIdeasPool.WebApi.csproj" />
   </ItemGroup>

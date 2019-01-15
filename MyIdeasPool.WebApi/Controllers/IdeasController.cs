@@ -54,7 +54,7 @@ namespace MyIdeasPool.WebApi.Controllers
 
 				var savedIdea = await _ideaService.Save(newIdea);
 
-				return Ok(_mapper.Map<IdeaModel>(savedIdea));
+				return StatusCode(201, _mapper.Map<IdeaModel>(savedIdea));
 			}
 
 			return BadRequest(ModelState);
