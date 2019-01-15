@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using MyIdeasPool.Core.Services;
@@ -21,19 +22,22 @@ namespace MyIdeasPool.Tests.WebApi.Controllers
 		IMapper _mapper;
 		IdeasController controller;
 		Mock<IIdeasService> _ideasService;
-		GlobalConfiguration _config;
+		Mock<IOptions<GlobalConfiguration>> _config;
 
 		[TestInitialize]
 		public void Setup()
 		{
 			_mapper = TestHelper.CrateMapper();
 			_ideasService = new Mock<IIdeasService>();
-			_config = new GlobalConfiguration()
-			{
-				IdeasPageSize = 10
-			};
 
-			controller = new IdeasController(_ideasService.Object, _config, _mapper);
+			_config = new Mock<IOptions<GlobalConfiguration>>();
+			_config.Setup(x => x.Value).Returns(new GlobalConfiguration()
+				{
+					IdeasPageSize = 10
+				}
+			);
+
+			controller = new IdeasController(_ideasService.Object, _config.Object, _mapper);
 
 			_ideasService.Setup(x => x.List()).Returns(TestHelper.MockAsyncSet(TestHelper.GenerateIdeas(30)).Object);
 		}

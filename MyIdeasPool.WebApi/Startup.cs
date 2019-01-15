@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyIdeasPool.Core;
-using MyIdeasPool.Core.Models;
-using MyIdeasPool.Core.Services;
-
-
+using MyIdeasPool.WebApi.Security;
 
 namespace MyIdeasPool.WebApi
 {
@@ -30,7 +23,11 @@ namespace MyIdeasPool.WebApi
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			services.AddMvc()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+				 //.AddJsonOptions(options => {
+					// options.SerializerSettings.date
+				 //}); ;
 
 			services.AddCoreRegistry(Configuration.GetConnectionString("IdeasDatabase"));
 			services.AddWebApiRegistry(Configuration);
@@ -40,7 +37,7 @@ namespace MyIdeasPool.WebApi
 				// Password settings.
 				options.Password.RequireDigit = true;
 				options.Password.RequireLowercase = true;
-				options.Password.RequireNonAlphanumeric = true;
+				options.Password.RequireNonAlphanumeric = false;
 				options.Password.RequireUppercase = true;
 				options.Password.RequiredLength = 6;
 				options.Password.RequiredUniqueChars = 1;
@@ -53,8 +50,13 @@ namespace MyIdeasPool.WebApi
 				// User settings.
 				options.User.AllowedUserNameCharacters =
 				"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-				options.User.RequireUniqueEmail = false;
+				options.User.RequireUniqueEmail = true;
 			});
+
+			services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
+
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -69,9 +71,14 @@ namespace MyIdeasPool.WebApi
 			}
 
 			app.UseHttpsRedirection();
-			app.UseMvc();
-			app.UseCors();
+
+			app.UseCustomHeaderMiddleware();
 			app.UseAuthentication();
+			app.UseCustomAuthMiddleware();
+			app.UseMvc();
+				
+			app.UseCors();
+			
 		}
 	}
 }

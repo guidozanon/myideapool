@@ -12,6 +12,7 @@ namespace MyIdeasPool.Core
 		{
 			services.AddScoped<IdeasContext>();
 			services.AddScoped<IIdeasService, IdeasService>();
+			services.AddScoped<IUserService, UserService>();
 
 			services.AddDbContext<IdeasContext>(options =>
 				options.UseSqlServer(connString)

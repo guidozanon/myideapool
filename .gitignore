@@ -13,3 +13,6 @@
 /MyIdeasPool.Tests/bin/Debug/netcoreapp2.2
 /MyIdeasPool.Core/bin/Debug/netcoreapp2.2
 /MyIdeasPool.WebApi/bin/Debug/netcoreapp2.2
+/MyIdeasPool.Core/bin/Release/netcoreapp2.2
+/MyIdeasPool.WebApi/bin/Release/netcoreapp2.2
+/.vs/config

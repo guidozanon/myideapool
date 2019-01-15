@@ -11,11 +11,11 @@ namespace MyIdeasPool.Core.Models
 		public int Impact { get; set; }
 		public DateTime CreatedAt { get; set; }
 
-		public decimal AverageScore
+		public double AverageScore
 		{
 			get
 			{
-				return (Confidence + Ease + Impact) / 3;
+				return (Confidence + Ease + Impact) / 3d;
 			}
 		}
 	}

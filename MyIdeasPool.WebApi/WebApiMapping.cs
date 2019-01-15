@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
+using MyIdeasPool.Core.Domain;
 using MyIdeasPool.Core.Models;
 using MyIdeasPool.WebApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyIdeasPool.WebApi
 {
@@ -16,6 +13,9 @@ namespace MyIdeasPool.WebApi
 			CreateMap<IdeaModel, Idea>();
 
 			CreateMap<User, UserModel>();
+
+			CreateMap<SignupModel, UserEntity>()
+				.ForMember(x=>x.UserName, mapper=>mapper.MapFrom(x=>x.Email));
 		}
 	}
 }

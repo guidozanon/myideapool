@@ -2,8 +2,9 @@
 
 namespace MyIdeasPool.Core.Domain
 {
-	class UserEntity  : IdentityUser
+	public class UserEntity  : IdentityUser
 	{
 		public string AvatarUrl { get; set; }
+		public string Name { get; set; }
 	}
 }

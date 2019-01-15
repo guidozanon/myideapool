@@ -1,22 +1,29 @@
-﻿using Newtonsoft.Json;
+﻿using MyIdeasPool.WebApi.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyIdeasPool.WebApi.Models
 {
 	public class IdeaModel
 	{
 		public Guid Id { get; set; }
+		[Required]
 		public string Content { get; set; }
+		[Range(0, 10)]
 		public int Ease { get; set; }
+		[Range(0, 10)]
 		public int Confidence { get; set; }
-
+		[Range(0, 10)]
 		public int Impact { get; set; }
 
-		[JsonProperty("created_at")]
+		[JsonProperty(PropertyName = "created_at")]
+		[JsonConverter(typeof(CustomJsDateTimeConverter))]
 		public DateTime CreatedAt { get; set; }
 
 
 		[JsonProperty("average_score")]
-		public decimal AverageScore { get; set; }
+		public double AverageScore { get; set; }
 	}
 }

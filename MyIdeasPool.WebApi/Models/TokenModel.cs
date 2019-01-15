@@ -4,7 +4,7 @@ namespace MyIdeasPool.WebApi.Models
 {
 	public class TokenModel
 	{
-		[JsonProperty("kwt")]
+		[JsonProperty("jwt")]
 		public string Jwt { get; set; }
 
 		[JsonProperty("refresh_token")]

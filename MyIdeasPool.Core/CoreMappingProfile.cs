@@ -11,11 +11,9 @@ namespace MyIdeasPool.Core
 			CreateMap<IdeaEntity, Idea>();
 			CreateMap<Idea, IdeaEntity>();
 
-			CreateMap<UserEntity, User>()
-				.ForMember(x => x.Name, map => map.MapFrom(x => x.UserName));
+			CreateMap<UserEntity, User>();
 
-			CreateMap<User, UserEntity>()
-				.ForMember(x => x.UserName, map => map.MapFrom(x => x.Name));
+			CreateMap<User, UserEntity>();
 		}
 	}
 }

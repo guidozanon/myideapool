@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace MyIdeasPool.WebApi.Helpers
@@ -13,7 +14,7 @@ namespace MyIdeasPool.WebApi.Helpers
 			{
 				var hash = hasher.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
 
-				return string.Format(BaseUrl, hash);
+				return string.Format(BaseUrl, string.Concat(hash.Select(b => b.ToString("X2")))).ToLower();
 			}
 		}
 	}
