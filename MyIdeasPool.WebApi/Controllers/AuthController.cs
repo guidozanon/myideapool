@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyIdeasPool.Core.Domain;
@@ -12,15 +14,16 @@ namespace MyIdeasPool.WebApi.Controllers
 {
 	[Route("access-tokens")]
 	[ApiController]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class AuthController : ControllerBase
 	{
-		private readonly JwtTokenGenerator _tokenGenerator;
+		private readonly ITokenGenerator _tokenGenerator;
 		private readonly SignInManager<UserEntity> _signinManager;
 		private readonly UserManager<UserEntity> _userManager;
 		private readonly IMapper _mapper;
 		private readonly IUserService _userService;
 
-		public AuthController(JwtTokenGenerator tokenGenerator, SignInManager<UserEntity> signinManager,
+		public AuthController(ITokenGenerator tokenGenerator, SignInManager<UserEntity> signinManager,
 			UserManager<UserEntity> userManager, IMapper mapper, IUserService userService)
 		{
 			_tokenGenerator = tokenGenerator;
@@ -31,6 +34,7 @@ namespace MyIdeasPool.WebApi.Controllers
 		}
 
 		[HttpPost]
+		[AllowAnonymous]
 		public async Task<IActionResult> Login(LoginModel login)
 		{
 			if (ModelState.IsValid)
@@ -55,7 +59,7 @@ namespace MyIdeasPool.WebApi.Controllers
 				}
 			}
 
-			return StatusCode(401);
+			return BadRequest("Wrong username or password");
 		}
 
 		[HttpPost]

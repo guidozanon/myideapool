@@ -10,11 +10,11 @@ namespace MyIdeasPool.WebApi.Models
 		public Guid Id { get; set; }
 		[Required]
 		public string Content { get; set; }
-		[Range(0, 10)]
+		[Range(1, 10)]
 		public int Ease { get; set; }
-		[Range(0, 10)]
+		[Range(1, 10)]
 		public int Confidence { get; set; }
-		[Range(0, 10)]
+		[Range(1, 10)]
 		public int Impact { get; set; }
 
 		[JsonProperty(PropertyName = "created_at")]

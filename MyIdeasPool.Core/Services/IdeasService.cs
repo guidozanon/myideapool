@@ -26,7 +26,10 @@ namespace MyIdeasPool.Core.Services
 		{
 			var idea = await _context.Ideas.FindAsync(id);
 
-			if (idea != null && idea.OwnerId == _userService.CurrentUser.Id)
+			if (idea.OwnerId != _userService.CurrentUser.Id)
+				throw new InvalidOperationException();
+
+			if (idea != null)
 			{
 				_context.Ideas.Remove(idea);
 

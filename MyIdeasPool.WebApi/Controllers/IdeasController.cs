@@ -34,12 +34,13 @@ namespace MyIdeasPool.WebApi.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<IdeaModel>>> Get([FromQuery]int page =1)
+		public async Task<ActionResult<IEnumerable<IdeaModel>>> Get([FromQuery]int page = 1)
 		{
 			var ideas = await _ideaService.List()
 					.Skip((page - 1) * _config.Value.IdeasPageSize)
 					.Take(_config.Value.IdeasPageSize)
 					.ProjectTo<IdeaModel>(_mapper.ConfigurationProvider)
+					.OrderByDescending(x => x.AverageScore)
 					.ToListAsync();
 
 			return Ok(ideas);
@@ -94,9 +95,20 @@ namespace MyIdeasPool.WebApi.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await _ideaService.Delete(id);
+				try
+				{
+					await _ideaService.Delete(id);
 
-				return StatusCode(204);
+					return StatusCode(204);
+				}
+				catch (InvalidOperationException)
+				{
+					return NotFound();
+				}
+				catch (Exception)
+				{
+					return BadRequest();
+				}
 			}
 			return BadRequest(ModelState);
 		}
