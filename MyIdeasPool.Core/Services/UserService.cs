@@ -98,6 +98,7 @@ namespace MyIdeasPool.Core.Services
 			{
 				var token = await _context.UserJwtTokens
 					.Where(t => t.Token == refreshToken && t.Type == TokenType.RefreshToken)
+					.Include(t=>t.User)
 					.FirstOrDefaultAsync();
 
 				if (token != null)

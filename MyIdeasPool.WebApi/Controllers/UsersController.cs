@@ -17,7 +17,6 @@ namespace MyIdeasPool.WebApi.Controllers
 {
 	[Route("[controller]")]
 	[ApiController]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class UsersController : ControllerBase
 	{
 		private readonly IUserService _userService;
@@ -37,7 +36,6 @@ namespace MyIdeasPool.WebApi.Controllers
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
 		public async Task<IActionResult> Signup(SignupModel signup)
 		{
 			if (ModelState.IsValid)

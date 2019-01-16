@@ -14,7 +14,7 @@ namespace MyIdeasPool.WebApi.Controllers
 {
 	[Route("access-tokens")]
 	[ApiController]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
 	public class AuthController : ControllerBase
 	{
 		private readonly ITokenGenerator _tokenGenerator;
@@ -34,7 +34,6 @@ namespace MyIdeasPool.WebApi.Controllers
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
 		public async Task<IActionResult> Login(LoginModel login)
 		{
 			if (ModelState.IsValid)
@@ -68,11 +67,13 @@ namespace MyIdeasPool.WebApi.Controllers
 		{
 			if (ModelState.IsValid && !string.IsNullOrEmpty(model.RefreshToken))
 			{
-				if (await _userService.IsValidToken(model.RefreshToken, TokenType.RefreshToken))
-				{
-					var user = await _userService.GetUser(model.RefreshToken);
+				var user = await _userService.GetUser(model.RefreshToken);
 
+				if (user != null)
+				{
 					var newToken = _tokenGenerator.Generate(user);
+
+					_userService.SetCurrentUser(user.Email);
 
 					await _userService.RevokeToken(model.RefreshToken, TokenType.RefreshToken);
 					await _userService.AddToken(newToken.Jwt, TokenType.Token);
@@ -87,6 +88,7 @@ namespace MyIdeasPool.WebApi.Controllers
 
 
 		[HttpDelete]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<IActionResult> Logout()
 		{
 			try
